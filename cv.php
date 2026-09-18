@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum Vitae | Hayan Art</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        dark: '#121212',
+                        brand: '#2c2b29'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .cv-section h3 { position: relative; }
+        .cv-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background-color: #121212;
+        }
+    </style>
+</head>
+<body class="bg-[#fcfbf9] text-gray-900 antialiased font-sans">
+
+    <nav class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.php" class="text-2xl font-serif font-semibold tracking-wide">Hayan Art</a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.php#home" class="text-gray-600 hover:text-dark transition-colors font-medium">Home</a>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-600 group-hover:text-dark transition-colors font-medium flex items-center gap-1 focus:outline-none">
+                            Artworks
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
+                            <div class="py-1">
+                                <a href="index.php#portfolio" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Printing</a>
+                                <a href="index.php#portfolio" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Painting</a>
+                                <a href="index.php#portfolio" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Paper Work</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <button class="text-gray-600 group-hover:text-dark transition-colors font-medium flex items-center gap-1 focus:outline-none">
+                            Collections
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
+                            <div class="py-1">
+                                <a href="index.php#portfolio" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Art Book</a>
+                                <a href="index.php#portfolio" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Portfolio</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="cv.php" class="text-dark font-medium border-b-2 border-dark">CV</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-24 px-4 max-w-4xl mx-auto min-h-screen">
+        <header class="mb-16 text-center md:text-left">
+            <h1 class="text-5xl md:text-6xl font-serif font-bold text-dark mb-4">Hayan</h1>
+            <h2 class="text-lg md:text-xl text-gray-500 tracking-[0.2em] uppercase font-light">Curriculum Vitae</h2>
+        </header>
+
+        <div class="space-y-20">
+            <!-- Biography -->
+            <section class="cv-section">
+                <h3 class="text-3xl font-serif text-dark mb-10">Biography</h3>
+                <ul class="space-y-4 text-lg text-gray-700 font-light leading-relaxed">
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 block w-1.5 h-1.5 rounded-full bg-dark flex-shrink-0"></span>
+                        Was Born In Iraq-Baghdad In 1957.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 block w-1.5 h-1.5 rounded-full bg-dark flex-shrink-0"></span>
+                        In 1974 - 1979 He Studied at the Institute Of Fine Art / Baghdad.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 block w-1.5 h-1.5 rounded-full bg-dark flex-shrink-0"></span>
+                        In 1977 - 1979 He Graduated From The Faculty Of Graphic Of The Institute Of Fine Art In Baghdad.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 block w-1.5 h-1.5 rounded-full bg-dark flex-shrink-0"></span>
+                        Member Of The Society Of Iraqi Plastic Artists.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 block w-1.5 h-1.5 rounded-full bg-dark flex-shrink-0"></span>
+                        Member Of The Iraqi Union Of Artists.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 block w-1.5 h-1.5 rounded-full bg-dark flex-shrink-0"></span>
+                        Member Of The Jordanian Plastic Artists Association.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 block w-1.5 h-1.5 rounded-full bg-dark flex-shrink-0"></span>
+                        He Works In (HAYAN graphic) Workshop As Full-time Artist.
+                    </li>
+                </ul>
+            </section>
+
+            <section class="cv-section">
+                <h3 class="text-3xl font-serif text-dark mb-10">Solo Exhibitions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-6 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1990</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>The 1st Personal Exhibition Al Muhtarf Gallery / Baghdad.</p>
+                        <p>The 2nd Personal Exhibition In Honor Of Opening Workshop Artist / Baghdad.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cv-section">
+                <h3 class="text-3xl font-serif text-dark mb-10">Group International Exhibitions</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1978 - 1979</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Student Exhibitions At The Iraqi Art Academy.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1979</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi National Museum Of Art Exhibition / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1980</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>The Annual Exhibition Of The Iraqi Artists Society / Baghdad.</p>
+                        <p>3rd World Biennial Graphic / London / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1981</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Sketching Exhibition Iraqi Artists Society / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1982</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Yearly Exhibition Iraqi Artists Society / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1989</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>9th Norwegian International Print Triennale Fredrik Stad / Norweg.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1990</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi Contemporary Art Exhibition Al Orfali Gallery / Baghdad.</p>
+                        <p>Iraqi Contemporary Art Exhibition / Beirut.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1995</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi Graphic Exhibition Hewar Gallery / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1997</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi Contemporary Art Exhibition In Honor Of Opening Athar Gallery Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1998</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi Contemporary Art Exhibition Dijla Gallery / Baghdad.</p>
+                        <p>Six Artists In Al Muhtarf Gallery (Fattah-Nasiri-Azzawi-Ibrahim-Hannon-Hayan) Baghdad.</p>
+                        <p>Babylon Festival Contemporary Art Exhibition Hiwar Gallery / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1999</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi Contemporary Art Exhibition / Emirates.</p>
+                        <p>Graphic Al Muhtarf To (4) Artists ( Fattah - Muhraddin - Nasiri - Hayan ) Baghdad.</p>
+                        <p>(50) Year’s Iraqi Graphic Exhibition Showman Institution / Amman.</p>
+                        <p>12th Norwegian International Print Triennale Fredrik Stad / Norweg.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2000</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>3rd Egyptian International Print Triennale Graphic / Cairo / Iskandarya.</p>
+                        <p>Yearly Exhibition Contemporary Art Iraqi Artists Society / Baghdad.</p>
+                        <p>Iraqi Contemporary Art Exhibition / Tunis.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2001</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Art’s Day Iraqi Exhibition Hiwar Gallery / Baghdad.</p>
+                        <p>Iraqi Artists Society Exhibition Al Orfali - Dar Al Mashriq Gallery / Amman.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2002</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi Artists Summer Exhibition Akkad Gallery / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2004</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>From UR To Baghdad) Exhibition Cooperation Of (UNESCO) Al Wasity Gallery / Baghdad.</p>
+                        <p>Graphic Art Exhibition In Fine Arts Society / Damascus.</p>
+                        <p>Direction Of Iraqi Contemporary Art Exhibition (Iraqi-Civilization) Al Ewess Cultural Establishment / Dubai</p>
+                        <p>Homage To (Shakir Hassan Al Said) And (Ismail Fattah) Exhibition Athar Gallery / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2005</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Mini Works Exhibition Al Sharjah Museum Of Artes / Emirates.</p>
+                        <p>Honorable Exhibition To (Shakir Hassan Al Said) Tunis City Museum-Kher Aladdin Palace- Al Triponal.</p>
+                        <p>Iraqi Contemporary Art Exhibition-Ministry Of Culture (Plastic Arts Department) / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2006</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>5th Egyptian International Print Triennale Graphic / Cairo / Iskandarya.</p>
+                        <p>Images From Iraqi Exhibition Hosted By The British Ambassador / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2007</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>(To Remember Al Jewahry) Exhibition Of The 5th Al Mada Cultural Week / Arbel / Iraq.</p>
+                        <p>(Baghdad-Paris) Iraqi Contemporary Artists Exhibition (Ministry Of Culture-Plastic Artes Department-Iraqi Artists Society-Al UNESCO) Baghdad / Paris.</p>
+                        <p>(Akkad Rise Again) Exhibition For Contemporary Iraqi Art Selection Akkad Gallery / Baghdad.</p>
+                        <p>(Golden Jubilee Exhibition) For Iraqi Plastic Artists Society Establishment Hiwar And Society Gallery / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2008</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Iraqi Contemporary Art Exhibition Hosted By Gilgamesh Company For Media And Artistic Production Hiwar Gallery / Baghdad.</p>
+                        <p>(Generations Visions) Exhibition Of The 6th Al Mada Cultural Week / Al Elwiia Gallery Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2010</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>(Accident) Exhibition For Participation Of Iraqi Artist’s Group In (Zamwa) Gallery / Sulaymaniyah. Hosted By (Akkad) Gallery / Baghdad.</p>
+                        <p>(Iraqi Union Of Artists) Exhibition For Contemporary Iraqi Art Selection Akkad Gallery / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2011</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>(Day For Faeq & Jawad) Exhibition For Contemporary Iraqi Art Hosted By Iraqi Plastic Artists Society / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2013</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>4th Guanlan International Print Biennial / China.</p>
+                        <p>(To Spirit Of The Artist Ismail Fattah Turk) Exhibition Of Selections From Iraqi Art Akkad Gallery / Baghdad.</p>
+                        <p>(Iraqi Spaces) Annual Exhibition Of The Iraqi Artists Society / Baghdad.</p>
+                        <p>(Baghdad, the capital of Arab culture) Annual Festival of Fine Arts Exhibition – sponsored by the Ministry of Culture.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2014</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>(IRAQ FIRST) Challenge Of Terrorism In Color Exhibition Of Selections From Iraqi Art Akkad Gallery / Baghdad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2015</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Annual Exhibition Of The Iraqi Artists Society / Baghdad.</p>
+                        <p>Formation 2015 International Print Exhibition / China Printmaking Museum.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-8 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2016 - 2026</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Annual Exhibition Of The Iraqi Artists Society / Baghdad</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cv-section">
+                <h3 class="text-3xl font-serif text-dark mb-10">Limited Original Painting & Graphic Collections</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1989</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Try Of Love (three images, etching & aquatint)</p>
+                        <p>Rubaiyya To Omar Khayyam (four images, etching & aquatint)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1997</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Eleven Faces To One Woman (eleven images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1998</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Seven Magical Pictures (seven images, painting)</p>
+                        <p>The (10) And One Nights (eleven images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1999</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Joker (seven images, painting)</p>
+                        <p>Sylph (seven images, painting)</p>
+                        <p>Lovesick Joker (five images, painting)</p>
+                        <p>Moody Joker (five images, painting)</p>
+                        <p>Woman With Fashion Joker’s (seven images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2000</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Adam And Eve (five images, painting)</p>
+                        <p>Man With Angel (Adam And Eve) (five images, painting)</p>
+                        <p>(5) Pictures To Venus (five images, painting)</p>
+                        <p>Luer Man (Adam And Eve) (seven images, painting)</p>
+                        <p>Dalliances Love (4 vol.) (four images, painting)</p>
+                        <p>Man And Woman Courtliness (seven images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2001</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Godfather’s Love (1) (seven images, painting on photo)</p>
+                        <p>Knight With Sweetheart (five images, painting)</p>
+                        <p>Woman With Woman (seven images, painting)</p>
+                        <p>Love Fury (seven images, painting)</p>
+                        <p>Lover’s Play (seven images, painting)</p>
+                        <p>Love And Sex Play (seven images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2002</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Embrace (seven images, painting)</p>
+                        <p>Godfather’s Love (2) (five images, painting)</p>
+                        <p>The Kiss (3 vol.) (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2003</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Homage To Guevara (eight images, painting)</p>
+                        <p>Couple (seven images, painting)</p>
+                        <p>Face And Dove (five images, painting)</p>
+                        <p>Mask And Dove (five images, painting)</p>
+                        <p>Face With Colors (five images, painting)</p>
+                        <p>Black And White Faces (ten images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2004</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Clown And Dove (five images, painting)</p>
+                        <p>Man In Love (five images, painting)</p>
+                        <p>Hot Kiss (five images, painting)</p>
+                        <p>Crying Man (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2005</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Woman Make A Gesture With Her Tongue (five images, painting)</p>
+                        <p>Kiss On Cheek (five images, painting)</p>
+                        <p>Kiss On Lips (five images, painting)</p>
+                        <p>Couple To Make Love (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2006</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Portrait To Lover (4 vol.) (five images, painting)</p>
+                        <p>Romance Kiss (4 vol.) (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2007</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Graphic Faces (3 vol.) (five images, painting)</p>
+                        <p>Lovemaking With Angel (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2008</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Kerkoz Masks (5 vol.) (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2009</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Faces In Faces (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2010</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Carnival Of Kerkoz (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2011</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Picture Of Kerkoz Beau (3 vol.) (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2014</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Portrait Of Kerkoz (5 vol.) (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2016</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Picture Of Tumbler (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2020</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Dancing On The Bed (five images, painting)</p>
+                        <p>Dancing On The Bed (five images, Graphic)</p>
+                        <p>Dancing On The Bed (6 vol.) (five images, Graphic A/P)</p>
+                        <p>In The Circus Players Room (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2021</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Girl & Genie (five images, painting)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-4 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2022</div>
+                    <div class="text-gray-700 space-y-2 text-lg font-light pt-1">
+                        <p>Cuddle And Hug (five images, painting)</p>
+                        <p>Couple Hugging (five images, painting)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cv-section">
+                <h3 class="text-3xl font-serif text-dark mb-10">Awards</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-6 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">1999</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Appreciative Prize In Iraqi Graphic Art / Iraq.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-6 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2000</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>The State Prize Of Creativity In Iraqi Graphic Art / Iraq.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-4 mb-6 group">
+                    <div class="text-xl font-serif font-bold text-dark border-b md:border-b-0 md:border-r border-gray-200 pb-2 md:pb-0 md:pr-4 pt-1 transition-colors group-hover:border-dark">2013</div>
+                    <div class="text-gray-700 space-y-3 text-lg font-light pt-1">
+                        <p>Certificate By The Committee Of Jurors For The Guanlan International Print Biennial / China.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer id="contact" class="bg-[#ebe9e4] pt-16 pb-8 text-[#1a1a1a] relative border-t border-gray-300">
+        <!-- Subtle noise texture for paper feel -->
+        <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-start mb-16">
+                <!-- Logo & Title -->
+                <div class="mb-10 md:mb-0">
+                    <div class="mb-2">
+                        <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="12" fill="black"/>
+                            <path d="M26 0V24C32.6274 24 38 18.6274 38 12C38 5.37258 32.6274 0 26 0Z" fill="black"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl md:text-2xl font-sans font-medium tracking-wide">Hayan Art</h2>
+                </div>
+
+                <!-- 3 Columns -->
+                <div class="flex flex-wrap gap-12 md:gap-24 font-sans text-[15px] leading-relaxed">
+                    <!-- Nav -->
+                    <div class="flex flex-col gap-1.5">
+                        <a href="index.php#home" class="hover:text-black hover:underline transition-all">Home</a>
+                        <a href="cv.php" class="hover:text-black hover:underline transition-all">CV</a>
+                        <a href="mailto:hello@hayan.art" class="hover:text-black hover:underline transition-all">Contact</a>
+                    </div>
+                    <!-- Social -->
+                    <div class="flex flex-col gap-1.5">
+                        <a href="https://www.facebook.com/hayan.abduljabbar" class="hover:text-black hover:underline transition-all">Facebook</a>
+                        <a href="#" class="hover:text-black hover:underline transition-all">Twitter</a>
+                        <a href="#" class="hover:text-black hover:underline transition-all">LinkedIn</a>
+                    </div>
+                    <!-- Info -->
+                    <div class="flex flex-col gap-1.5">
+                        <p>Phone Number: +964 770 392 6787</p>
+                        <p>Baghdad, Iraq</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm mt-12 pt-8 border-t border-gray-300/50">
+                <p class="mb-4 md:mb-0">Proudly designed by <a href="#" class="underline hover:text-black font-medium">Shams Hayan</a></p>
+                <p>&copy; 2026 Hayan. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
