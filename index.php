@@ -18,7 +18,7 @@ function getGalleryItems() {
                     // Determine category based on folder name
                     $catStr = strtolower(basename(dirname($path)));
                     $category = 'painting'; // default
-                    if (strpos($catStr, 'print') !== false) $category = 'printmaking';
+                    if (strpos($catStr, 'print') !== false) $category = 'Printmaking';
                     if (strpos($catStr, 'paper') !== false) $category = 'on-paper';
 
                     // Format title from filename (remove extension, replace - and _ with spaces)
@@ -54,6 +54,9 @@ function getGalleryItems() {
                 $bookImagesMap[$dir][] = $fileInfo->getPathname();
             }
         }
+
+        // Sort the books naturally based on their folder names/paths before rendering
+        uksort($bookImagesMap, 'strnatcasecmp');
 
         foreach ($bookImagesMap as $dir => $images) {
             $bookFolderName = basename($dir);
@@ -128,6 +131,9 @@ function getGalleryItems() {
             }
         }
 
+        // Sort the portfolios naturally based on their folder names/paths before rendering
+        uksort($portfolioImagesMap, 'strnatcasecmp');
+
         foreach ($portfolioImagesMap as $dir => $images) {
             $portfolioFolderName = basename($dir);
             
@@ -200,10 +206,9 @@ function getGalleryItems() {
 $galleryItems = getGalleryItems();
 
 // --- FALLBACK MOCK DATA ---
-// If the PHP script runs somewhere without the folders (like a preview window), it loads these examples.
 if (empty($galleryItems)) {
     $galleryItems = [
-        ['url' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800', 'title' => 'Adam is waiting to eat the apple', 'category' => 'printmaking', 'subcat' => '1970'],
+        ['url' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800', 'title' => 'Adam is waiting to eat the apple', 'category' => 'Printmaking', 'subcat' => '1970'],
         ['url' => 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=800', 'title' => 'Bloody Dramatic Scene', 'category' => 'painting', 'subcat' => '1980'],
         ['url' => 'https://images.unsplash.com/photo-1568526381923-caf3fd520382?q=80&w=800', 'title' => 'Acrobat Lover', 'category' => 'on-paper', 'subcat' => '1990'],
         ['url' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800', 'title' => 'Faces in a book 1', 'category' => 'art-book', 'subcat' => '2004'],
@@ -244,23 +249,22 @@ if (empty($galleryItems)) {
         html { scroll-behavior: smooth; }
         .gallery-item { transition: all 0.4s ease-in-out; }
         
+        /* Fixes phantom scroll space by removing item completely from DOM flow */
         .gallery-item.hidden-item {
-            opacity: 0;
-            transform: scale(0.9);
-            position: absolute;
-            visibility: hidden;
-            pointer-events: none;
+            display: none !important;
         }
 
         .gallery-item.show-item {
-            opacity: 1;
-            transform: scale(1);
-            position: relative;
-            visibility: visible;
+            animation: popIn 0.4s ease-out forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased font-sans">
+<body class="bg-[#fcfbf9] text-gray-900 antialiased font-sans">
 
     <nav class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -271,7 +275,6 @@ if (empty($galleryItems)) {
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="#home" class="text-gray-600 hover:text-dark transition-colors font-medium">Home</a>
                     
-                    <!-- Dropdown for Artworks -->
                     <div class="relative group">
                         <button class="text-gray-600 group-hover:text-dark transition-colors font-medium flex items-center gap-1 focus:outline-none">
                             Artworks
@@ -279,14 +282,13 @@ if (empty($galleryItems)) {
                         </button>
                         <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
                             <div class="py-1">
-                                <a href="#portfolio" onclick="document.querySelector('[data-filter=\'printmaking\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Printmaking</a>
+                                <a href="#portfolio" onclick="document.querySelector('[data-filter=\'Printmaking\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Printmaking</a>
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'painting\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Painting</a>
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'on-paper\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">On Paper</a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Dropdown for Collections -->
                     <div class="relative group">
                         <button class="text-gray-600 group-hover:text-dark transition-colors font-medium flex items-center gap-1 focus:outline-none">
                             Collections
@@ -300,16 +302,15 @@ if (empty($galleryItems)) {
                         </div>
                     </div>
 
-                    <a href="cv.php" class="text-gray-600 hover:text-dark transition-colors font-medium">CV</a>
+                    <a href="cv.html" class="text-gray-600 hover:text-dark transition-colors font-medium">CV</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <section id="home" class="pt-20 w-full min-h-[90vh] flex flex-col md:flex-row bg-brand">
-        <!-- Left Side (Image with Title) -->
         <div class="w-full md:w-1/2 relative min-h-[50vh] md:min-h-full">
-            <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover object-top" alt="Hayan Art Painting">
+            <img src="1970\Painting\doleful man.jpg" class="absolute inset-0 w-full h-full object-cover object-top" alt="Hayan Art Painting">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             
             <div class="absolute bottom-8 left-8 md:bottom-16 md:left-12 text-white">
@@ -318,9 +319,7 @@ if (empty($galleryItems)) {
             </div>
         </div>
 
-        <!-- Right Side (Biography/Texture) -->
         <div class="w-full md:w-1/2 bg-brand flex items-center justify-center p-12 md:p-24 text-gray-100 relative shadow-[inset_10px_0_20px_rgba(0,0,0,0.5)]">
-            <!-- Noise texture overlay -->
             <div class="absolute inset-0 opacity-[0.15]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
             
             <div class="relative z-10 max-w-lg">
@@ -335,20 +334,16 @@ if (empty($galleryItems)) {
         <div class="text-center mb-12">
             <h2 class="text-3xl font-serif font-bold text-dark mb-8">Selected Works</h2>
             
-            <!-- Category Filters -->
             <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-4" id="filter-buttons">
-                <button class="filter-btn px-6 py-2 rounded-full border border-dark bg-dark text-white font-medium transition-all" data-filter="all">All</button>
-                <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="printmaking">Printmaking</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-dark bg-dark text-white font-medium transition-all" data-filter="Printmaking">Printmaking</button>
                 <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="painting">Painting</button>
                 <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="on-paper">On Paper</button>
                 <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="art-book">Art Book</button>
                 <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="portfolio">Portfolio</button>
             </div>
 
-            <!-- Dynamic Sub-Filters (Injected by JS) -->
             <div class="hidden flex-wrap justify-center gap-2 md:gap-3 mb-8 transition-all duration-300" id="sub-filter-buttons"></div>
             
-            <!-- Book View Header (Hidden by default) -->
             <div id="book-view-header" class="hidden flex-col items-center mb-8 transition-all duration-300">
                 <button id="back-to-books-btn" class="mb-4 px-5 py-2 rounded-full border border-gray-300 bg-white text-gray-700 hover:border-dark hover:text-dark hover:shadow-md flex items-center gap-2 font-medium transition-all focus:outline-none">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -358,7 +353,6 @@ if (empty($galleryItems)) {
             </div>
         </div>
 
-        <!-- THE DYNAMIC PHP GALLERY -->
         <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6 relative" id="gallery-grid">
             <?php foreach ($galleryItems as $item): ?>
                 <div class="gallery-item group relative break-inside-avoid mb-4 md:mb-6 inline-block w-full overflow-hidden rounded-md bg-gray-200 show-item shadow-sm hover:shadow-xl cursor-pointer <?php echo isset($item['is_book']) ? 'book-trigger' : 'lightbox-trigger'; ?>" 
@@ -400,12 +394,10 @@ if (empty($galleryItems)) {
     </div>
 
     <footer id="contact" class="bg-[#ebe9e4] pt-16 pb-8 text-[#1a1a1a] relative border-t border-gray-300">
-        <!-- Subtle noise texture for paper feel -->
         <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-start mb-16">
-                <!-- Logo & Title -->
                 <div class="mb-10 md:mb-0">
                     <div class="mb-2">
                         <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -416,21 +408,17 @@ if (empty($galleryItems)) {
                     <h2 class="text-xl md:text-2xl font-sans font-medium tracking-wide">Hayan Art</h2>
                 </div>
 
-                <!-- 3 Columns -->
                 <div class="flex flex-wrap gap-12 md:gap-24 font-sans text-[15px] leading-relaxed">
-                    <!-- Nav -->
                     <div class="flex flex-col gap-1.5">
                         <a href="index.php#home" class="hover:text-black hover:underline transition-all">Home</a>
-                        <a href="cv.php" class="hover:text-black hover:underline transition-all">CV</a>
+                        <a href="cv.html" class="hover:text-black hover:underline transition-all">CV</a>
                         <a href="mailto:hello@hayan.art" class="hover:text-black hover:underline transition-all">Contact</a>
                     </div>
-                    <!-- Social -->
                     <div class="flex flex-col gap-1.5">
-                        <a href="https://www.facebook.com/hayan.abduljabbar" class="hover:text-black hover:underline transition-all">Facebook</a>
+                        <a href="https://www.facebook.com/hayan.abduljabbar" target="_blank" class="hover:text-black hover:underline transition-all">Facebook</a>
                         <a href="#" class="hover:text-black hover:underline transition-all">Twitter</a>
                         <a href="#" class="hover:text-black hover:underline transition-all">LinkedIn</a>
                     </div>
-                    <!-- Info -->
                     <div class="flex flex-col gap-1.5">
                         <p>Phone Number: +964 770 392 6787</p>
                         <p>Baghdad, Iraq</p>
@@ -438,7 +426,6 @@ if (empty($galleryItems)) {
                 </div>
             </div>
 
-            <!-- Bottom Row -->
             <div class="flex flex-col md:flex-row justify-between items-center text-sm mt-12 pt-8 border-t border-gray-300/50">
                 <p class="mb-4 md:mb-0">Proudly designed by <a href="#" class="underline hover:text-black font-medium">Shams Hayan</a></p>
                 <p>&copy; 2026 Hayan. All Rights Reserved.</p>
@@ -451,13 +438,20 @@ if (empty($galleryItems)) {
             const filterButtons = document.querySelectorAll('.filter-btn');
             const subFilterContainer = document.getElementById('sub-filter-buttons');
             const galleryItems = document.querySelectorAll('.gallery-item');
+            const filterButtonsContainer = document.getElementById('filter-buttons');
+            const bookViewHeader = document.getElementById('book-view-header');
+            const backToBooksBtn = document.getElementById('back-to-books-btn');
+            const bookViewTitle = document.getElementById('book-view-title');
+            const backToYearSpan = document.getElementById('back-to-year');
+            const backToTypeSpan = document.getElementById('back-to-type');
+            
+            // Initialization variables (Moved to top to prevent ReferenceError)
+            let activeMainFilter = 'Printmaking';
+            let activeSubFilter = '1970';
+            let isBookViewActive = false;
 
-            let activeMainFilter = 'all';
-            let activeSubFilter = 'all';
-
-            // Mapped exactly to the folders matching your provided tree
             const subCategoriesMap = {
-                'printmaking': ['1970', '1980', '1990', '2000', '2010', '2020'],
+                'Printmaking': ['1970', '1980', '1990', '2000', '2010', '2020'],
                 'painting': ['1970', '1980', '1990', '2000', '2010', '2020'],
                 'on-paper': ['1970', '1980', '1990', '2000', '2010', '2020'],
                 'art-book': ['2004', '2010', '2012', '2020'],
@@ -466,38 +460,42 @@ if (empty($galleryItems)) {
 
             function updateGallery() {
                 const grid = document.getElementById('gallery-grid');
-                
-                // HACK FOR CHROME/SAFARI SCROLL BUG:
-                // Momentarily hide the entire grid before filtering. This forces the 
-                // browser to perfectly recalculate the height of the CSS Columns.
                 grid.style.display = 'none';
+
+                // Dynamically switch layout: Books/Portfolios use Horizontal Grid, Artworks use Vertical Masonry
+                if (!isBookViewActive) {
+                    if (activeMainFilter === 'art-book' || activeMainFilter === 'portfolio') {
+                        grid.classList.remove('columns-1', 'sm:columns-2', 'lg:columns-3', 'xl:columns-4');
+                        grid.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'items-start');
+                    } else {
+                        grid.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'items-start');
+                        grid.classList.add('columns-1', 'sm:columns-2', 'lg:columns-3', 'xl:columns-4');
+                    }
+                }
 
                 galleryItems.forEach(item => {
                     const itemCategory = item.getAttribute('data-category');
                     const itemSubcat = item.getAttribute('data-subcat');
                     
-                    const matchesMain = activeMainFilter === 'all' || activeMainFilter === itemCategory;
+                    const matchesMain = activeMainFilter === itemCategory;
                     
                     let matchesSub = true;
                     if (subCategoriesMap[activeMainFilter]) {
-                        matchesSub = activeSubFilter === 'all' || activeSubFilter === itemSubcat;
+                        matchesSub = activeSubFilter === itemSubcat;
                     }
 
                     if (matchesMain && matchesSub) {
                         item.classList.remove('hidden-item');
                         item.classList.add('show-item');
-                        item.style.display = ''; // Clear inline styles so it shows
+                        item.style.display = ''; 
                     } else {
                         item.classList.remove('show-item');
                         item.classList.add('hidden-item');
-                        item.style.display = 'none'; // Absolutely force removal from document flow
+                        item.style.display = 'none'; 
                     }
                 });
 
-                // Trigger a browser reflow (tells the browser to measure the grid right now)
                 void grid.offsetHeight;
-                
-                // Bring the grid back. It will now snap perfectly to the correct height!
                 grid.style.display = '';
             }
 
@@ -507,18 +505,17 @@ if (empty($galleryItems)) {
                 if (subCategoriesMap[mainCategory]) {
                     subFilterContainer.classList.remove('hidden');
                     subFilterContainer.classList.add('flex');
-                    
-                    const allBtn = document.createElement('button');
-                    allBtn.className = 'sub-filter-btn px-4 py-1.5 rounded-full border border-dark bg-dark text-white text-sm font-medium transition-all';
-                    allBtn.setAttribute('data-subfilter', 'all');
-                    allBtn.textContent = 'All Categories';
-                    subFilterContainer.appendChild(allBtn);
 
+                    // Loops through map to create standard year buttons
                     subCategoriesMap[mainCategory].forEach(sub => {
                         const btn = document.createElement('button');
-                        btn.className = 'sub-filter-btn px-4 py-1.5 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark text-sm font-medium transition-all';
                         btn.setAttribute('data-subfilter', sub);
                         btn.textContent = sub;
+                        if (activeSubFilter === sub) {
+                            btn.className = 'sub-filter-btn px-4 py-1.5 rounded-full border border-dark bg-dark text-white text-sm font-medium transition-all';
+                        } else {
+                            btn.className = 'sub-filter-btn px-4 py-1.5 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark text-sm font-medium transition-all';
+                        }
                         subFilterContainer.appendChild(btn);
                     });
 
@@ -543,9 +540,16 @@ if (empty($galleryItems)) {
                 }
             }
 
-            // Main Category Clicks
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
+                    // Reset book view if active
+                    if (isBookViewActive) {
+                        isBookViewActive = false;
+                        document.querySelectorAll('.temp-book-page').forEach(el => el.remove());
+                        document.getElementById('book-view-header').classList.remove('flex');
+                        document.getElementById('book-view-header').classList.add('hidden');
+                    }
+
                     filterButtons.forEach(btn => {
                         btn.classList.remove('bg-dark', 'text-white', 'border-dark');
                         btn.classList.add('bg-transparent', 'text-gray-600', 'border-gray-300');
@@ -555,58 +559,59 @@ if (empty($galleryItems)) {
                     button.classList.add('bg-dark', 'text-white', 'border-dark');
 
                     activeMainFilter = button.getAttribute('data-filter');
-                    activeSubFilter = 'all'; 
+                    
+                    // Default to the first available category instead of "all"
+                    if (subCategoriesMap[activeMainFilter]) {
+                        activeSubFilter = subCategoriesMap[activeMainFilter][0];
+                    }
                     
                     renderSubFilters(activeMainFilter);
                     updateGallery();
                 });
             });
 
-            // --- Book Category Logic ---
-            const bookTriggers = document.querySelectorAll('.book-trigger');
-            const bookViewHeader = document.getElementById('book-view-header');
-            const backToBooksBtn = document.getElementById('back-to-books-btn');
-            const bookViewTitle = document.getElementById('book-view-title');
-            const backToYearSpan = document.getElementById('back-to-year');
-            const backToTypeSpan = document.getElementById('back-to-type');
-            const filterButtonsContainer = document.getElementById('filter-buttons');
+            // Initialize Default State on page load
+            filterButtons.forEach(btn => {
+                if (btn.getAttribute('data-filter') === activeMainFilter) {
+                    btn.classList.remove('bg-transparent', 'text-gray-600', 'border-gray-300');
+                    btn.classList.add('bg-dark', 'text-white', 'border-dark');
+                } else {
+                    btn.classList.remove('bg-dark', 'text-white', 'border-dark');
+                    btn.classList.add('bg-transparent', 'text-gray-600', 'border-gray-300');
+                }
+            });
+            renderSubFilters(activeMainFilter);
+            updateGallery(); // Force gallery to filter items immediately on load
 
-            let isBookViewActive = false;
+            const bookTriggers = document.querySelectorAll('.book-trigger');
 
             function openBookView(images, title, year, category) {
                 isBookViewActive = true;
                 
-                // 1. Hide standard filters
                 filterButtonsContainer.classList.add('hidden');
                 subFilterContainer.classList.remove('flex');
                 subFilterContainer.classList.add('hidden');
                 
-                // 2. Hide all standard gallery covers
                 galleryItems.forEach(item => {
                     item.classList.remove('show-item');
                     item.classList.add('hidden-item');
+                    item.style.display = 'none'; // strictly hide everything
                 });
 
-                // 3. Show Book Header
                 bookViewHeader.classList.remove('hidden');
                 bookViewHeader.classList.add('flex');
                 bookViewTitle.textContent = title;
                 backToYearSpan.textContent = year;
                 backToTypeSpan.textContent = category === 'portfolio' ? 'Portfolios' : 'Books';
 
-                // --- FIX FOR VISUAL ORDERING ---
-                // Convert masonry layout to a standard left-to-right grid so pages read sequentially
                 const grid = document.getElementById('gallery-grid');
                 grid.classList.remove('columns-1', 'sm:columns-2', 'lg:columns-3', 'xl:columns-4');
                 grid.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'items-start');
 
-                // 4. Generate and inject book pages into the grid
                 images.forEach((imgUrl, index) => {
                     const pageDiv = document.createElement('div');
-                    // Add .temp-book-page class to target them later for removal
                     pageDiv.className = 'temp-book-page lightbox-trigger cursor-pointer gallery-item group relative break-inside-avoid mb-4 md:mb-6 w-full overflow-hidden rounded-md bg-gray-200 show-item shadow-sm hover:shadow-xl';
                     
-                    // Smart labeling: Index 0 is the Cover we moved to the front!
                     const labelText = index === 0 ? 'Cover' : 'Page ' + index;
 
                     pageDiv.innerHTML = `
@@ -618,34 +623,23 @@ if (empty($galleryItems)) {
                     grid.appendChild(pageDiv);
                 });
                 
-                // Scroll up smoothly to top of portfolio
                 document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });
             }
 
             backToBooksBtn.addEventListener('click', () => {
                 isBookViewActive = false;
                 
-                // 1. Remove temporary pages
                 document.querySelectorAll('.temp-book-page').forEach(el => el.remove());
                 
-                // 2. Hide Book Header
                 bookViewHeader.classList.remove('flex');
                 bookViewHeader.classList.add('hidden');
                 
-                // --- RESTORE MASONRY ---
-                // Return to vertical cascading look for standard cover viewing
-                const grid = document.getElementById('gallery-grid');
-                grid.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'items-start');
-                grid.classList.add('columns-1', 'sm:columns-2', 'lg:columns-3', 'xl:columns-4');
-
-                // 3. Show standard filters
                 filterButtonsContainer.classList.remove('hidden');
                 if (subCategoriesMap[activeMainFilter]) {
                     subFilterContainer.classList.remove('hidden');
                     subFilterContainer.classList.add('flex');
                 }
 
-                // 4. Restore gallery visibility
                 updateGallery();
             });
 
@@ -669,21 +663,18 @@ if (empty($galleryItems)) {
                 });
             });
 
-            // --- Lightbox Logic ---
             const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightbox-img');
             const galleryGrid = document.getElementById('gallery-grid');
 
-            // Event delegation for opening lightbox (handles both normal items and dynamic book pages)
             galleryGrid.addEventListener('click', (e) => {
                 const item = e.target.closest('.lightbox-trigger');
-                if (!item) return; // Ignore clicks if it's not a lightbox trigger (like a book cover)
+                if (!item) return;
 
                 const img = item.querySelector('img');
                 if (img) {
                     lightboxImg.src = img.src;
                     lightbox.classList.remove('hidden');
-                    // Small delay to allow display:block to apply before changing opacity/scale for transition
                     setTimeout(() => {
                         lightbox.classList.remove('opacity-0');
                         lightboxImg.classList.remove('scale-95');
@@ -692,7 +683,6 @@ if (empty($galleryItems)) {
                 }
             });
 
-            // Close lightbox function
             function closeLightbox() {
                 lightbox.classList.add('opacity-0');
                 lightboxImg.classList.remove('scale-100');
@@ -703,10 +693,8 @@ if (empty($galleryItems)) {
                 }, 300);
             }
 
-            // Close on click anywhere in the lightbox
             lightbox.addEventListener('click', closeLightbox);
             
-            // Close on escape key press
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
                     closeLightbox();
