@@ -18,7 +18,7 @@ function getGalleryItems() {
                     // Determine category based on folder name
                     $catStr = strtolower(basename(dirname($path)));
                     $category = 'painting'; // default
-                    if (strpos($catStr, 'print') !== false) $category = 'Printmaking';
+                    if (strpos($catStr, 'print') !== false) $category = 'printmaking';
                     if (strpos($catStr, 'paper') !== false) $category = 'on-paper';
 
                     // Format title from filename (remove extension, replace - and _ with spaces)
@@ -203,7 +203,7 @@ $galleryItems = getGalleryItems();
 // If the PHP script runs somewhere without the folders (like a preview window), it loads these examples.
 if (empty($galleryItems)) {
     $galleryItems = [
-        ['url' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800', 'title' => 'Adam is waiting to eat the apple', 'category' => 'Printmaking', 'subcat' => '1970'],
+        ['url' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800', 'title' => 'Adam is waiting to eat the apple', 'category' => 'printmaking', 'subcat' => '1970'],
         ['url' => 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=800', 'title' => 'Bloody Dramatic Scene', 'category' => 'painting', 'subcat' => '1980'],
         ['url' => 'https://images.unsplash.com/photo-1568526381923-caf3fd520382?q=80&w=800', 'title' => 'Acrobat Lover', 'category' => 'on-paper', 'subcat' => '1990'],
         ['url' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800', 'title' => 'Faces in a book 1', 'category' => 'art-book', 'subcat' => '2004'],
@@ -279,7 +279,7 @@ if (empty($galleryItems)) {
                         </button>
                         <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
                             <div class="py-1">
-                                <a href="#portfolio" onclick="document.querySelector('[data-filter=\'Printmaking\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Printmaking</a>
+                                <a href="#portfolio" onclick="document.querySelector('[data-filter=\'printmaking\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Printmaking</a>
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'painting\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Painting</a>
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'on-paper\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">On Paper</a>
                             </div>
@@ -338,7 +338,7 @@ if (empty($galleryItems)) {
             <!-- Category Filters -->
             <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-4" id="filter-buttons">
                 <button class="filter-btn px-6 py-2 rounded-full border border-dark bg-dark text-white font-medium transition-all" data-filter="all">All</button>
-                <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="Printmaking">Printmaking</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="printmaking">Printmaking</button>
                 <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="painting">Painting</button>
                 <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="on-paper">On Paper</button>
                 <button class="filter-btn px-6 py-2 rounded-full border border-gray-300 bg-transparent text-gray-600 hover:border-dark hover:text-dark font-medium transition-all" data-filter="art-book">Art Book</button>
@@ -457,7 +457,7 @@ if (empty($galleryItems)) {
 
             // Mapped exactly to the folders matching your provided tree
             const subCategoriesMap = {
-                'Printing': ['1970', '1980', '1990', '2000', '2010', '2020'],
+                'printmaking': ['1970', '1980', '1990', '2000', '2010', '2020'],
                 'painting': ['1970', '1980', '1990', '2000', '2010', '2020'],
                 'on-paper': ['1970', '1980', '1990', '2000', '2010', '2020'],
                 'art-book': ['2004', '2010', '2012', '2020'],
