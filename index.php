@@ -21,21 +21,37 @@ function getGalleryItems() {
                     if (strpos($catStr, 'print') !== false) $category = 'Printmaking';
                     if (strpos($catStr, 'paper') !== false) $category = 'on-paper';
 
-                    // Format title from filename (remove extension, replace - and _ with spaces)
+                    // Format title from filename
                     $title = ucwords(str_replace(['-', '_'], ' ', pathinfo($fileInfo->getFilename(), PATHINFO_FILENAME)));
+
+                    // Extract raw text from matching .txt file
+                    $rawText = '';
+                    $txtPath = pathinfo($path, PATHINFO_DIRNAME) . DIRECTORY_SEPARATOR . pathinfo($path, PATHINFO_FILENAME) . '.txt';
+                    
+                    if (file_exists($txtPath)) {
+                        $rawText = trim(file_get_contents($txtPath));
+                    }
+                    
+                    // Smart Defaults if text file is missing or empty
+                    if (empty($rawText)) {
+                        if ($category === 'Printmaking') $rawText = 'Etching';
+                        elseif ($category === 'painting') $rawText = 'Oil on Canvas';
+                        elseif ($category === 'on-paper') $rawText = 'Mixed Media on Paper';
+                    }
 
                     // Get relative path for web URL
                     $relativePath = substr($path, strlen($baseDir) + 1);
                     $webUrl = str_replace('\\', '/', $relativePath);
                     
-                    // Encode URL to handle spaces and special characters in folder/file names
+                    // Encode URL to handle spaces
                     $encodedUrl = implode('/', array_map('rawurlencode', explode('/', $webUrl)));
 
                     $items[] = [
                         'url' => $encodedUrl,
                         'title' => $title,
                         'category' => $category,
-                        'subcat' => $decade
+                        'subcat' => $decade,
+                        'raw_text' => $rawText
                     ];
                 }
             }
@@ -45,7 +61,6 @@ function getGalleryItems() {
     // 2. Scan ART-BOOK
     $artBookPath = $baseDir . DIRECTORY_SEPARATOR . 'hayan C-V & prass' . DIRECTORY_SEPARATOR . 'ART-BOOK';
     if (is_dir($artBookPath)) {
-        // Group files by the directory they directly sit in (handles nested books)
         $bookImagesMap = [];
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($artBookPath));
         foreach ($iterator as $fileInfo) {
@@ -55,24 +70,20 @@ function getGalleryItems() {
             }
         }
 
-        // Sort the books naturally based on their folder names/paths before rendering
         uksort($bookImagesMap, 'strnatcasecmp');
 
         foreach ($bookImagesMap as $dir => $images) {
             $bookFolderName = basename($dir);
             
-            // Extract subcategory year (2004, 2010, 2012, 2020) from full directory path
             $subcat = '2004'; // fallback
             if (preg_match('/(2004|2010|2012|2020)/', $dir, $matches)) {
                 $subcat = $matches[1];
             }
             
-            // Clean up folder name for the title
-            $cleanName = preg_replace('/-\d{4}$/', '', $bookFolderName); // Remove year
-            $cleanName = preg_replace('/^ART-BOOK\s*-?/i', '', $cleanName); // Remove "ART-BOOK " prefix
+            $cleanName = preg_replace('/-\d{4}$/', '', $bookFolderName);
+            $cleanName = preg_replace('/^ART-BOOK\s*-?/i', '', $cleanName);
             $bookTitle = ucwords(str_replace(['-', '_'], ' ', $cleanName));
 
-            // Sort images purely by filename, case-insensitively, natural order
             usort($images, function($a, $b) {
                 return strnatcasecmp(basename($a), basename($b));
             });
@@ -86,21 +97,18 @@ function getGalleryItems() {
                 $encodedUrl = implode('/', array_map('rawurlencode', explode('/', $webUrl)));
                 $pages[] = $encodedUrl;
                 
-                // Check if this file is specifically named cover.jpg (or .png etc)
-                $filename = strtolower(basename($path));
-                if (strpos($filename, 'cover.') === 0) {
+                if (strpos(strtolower(basename($path)), 'cover.') === 0) {
                     $coverIndex = $index;
                 }
             }
 
-            // Set the explicit cover image, moving it to the absolute front
             if ($coverIndex !== -1) {
                 $coverImage = $pages[$coverIndex]; 
                 unset($pages[$coverIndex]); 
                 array_unshift($pages, $coverImage); 
-                $pages = array_values($pages); // Re-index array
+                $pages = array_values($pages);
             } elseif (count($pages) > 0) {
-                $coverImage = $pages[0]; // Fallback to first image if no cover is found
+                $coverImage = $pages[0];
             } else {
                 $coverImage = '';
             }
@@ -112,7 +120,8 @@ function getGalleryItems() {
                     'category' => 'art-book',
                     'subcat' => $subcat,
                     'is_book' => true,
-                    'book_contents' => json_encode($pages)
+                    'book_contents' => json_encode($pages),
+                    'raw_text' => 'Art Book Collection'
                 ];
             }
         }
@@ -121,7 +130,6 @@ function getGalleryItems() {
     // 3. Scan Portfolio
     $portfolioPath = $baseDir . DIRECTORY_SEPARATOR . 'hayan C-V & prass' . DIRECTORY_SEPARATOR . 'Portfolio Box Work\'s';
     if (is_dir($portfolioPath)) {
-        // Group files by their immediate parent directory, just like Art Books
         $portfolioImagesMap = [];
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($portfolioPath));
         foreach ($iterator as $fileInfo) {
@@ -131,30 +139,25 @@ function getGalleryItems() {
             }
         }
 
-        // Sort the portfolios naturally based on their folder names/paths before rendering
         uksort($portfolioImagesMap, 'strnatcasecmp');
 
         foreach ($portfolioImagesMap as $dir => $images) {
             $portfolioFolderName = basename($dir);
             
-            // Prevent creating an item for the decade wrapper folders if they accidentally contain loose images
             if (preg_match('/^Portfolio Box Work\'s \d{4}$/i', $portfolioFolderName)) {
                 continue; 
             }
 
-            // Extract subcategory year (1990, 2000, 2010, 2020) from the full directory path
-            $subcat = '1990'; // fallback
+            $subcat = '1990'; 
             if (preg_match('/(1990|2000|2010|2020)/', $dir, $matches)) {
                 $subcat = $matches[1];
             }
             
-            // Clean up folder name for the title (Remove years like "-2003" and parenthesis)
             $cleanName = preg_replace('/-\d{4}$/', '', $portfolioFolderName); 
             $cleanName = preg_replace('/\(.*?\)/', '', $cleanName); 
             $cleanName = str_replace(['-', '_'], ' ', $cleanName); 
             $portfolioTitle = trim(ucwords(strtolower($cleanName)));
 
-            // Sort images purely by filename, case-insensitively, natural order
             usort($images, function($a, $b) {
                 return strnatcasecmp(basename($a), basename($b));
             });
@@ -168,21 +171,18 @@ function getGalleryItems() {
                 $encodedUrl = implode('/', array_map('rawurlencode', explode('/', $webUrl)));
                 $pages[] = $encodedUrl;
                 
-                // Check if this file is specifically named cover.jpg (or .png etc)
-                $filename = strtolower(basename($path));
-                if (strpos($filename, 'cover.') === 0) {
+                if (strpos(strtolower(basename($path)), 'cover.') === 0) {
                     $coverIndex = $index;
                 }
             }
 
-            // Set the explicit cover image, moving it to the absolute front
             if ($coverIndex !== -1) {
                 $coverImage = $pages[$coverIndex]; 
                 unset($pages[$coverIndex]); 
                 array_unshift($pages, $coverImage); 
-                $pages = array_values($pages); // Re-index array
+                $pages = array_values($pages);
             } elseif (count($pages) > 0) {
-                $coverImage = $pages[0]; // Fallback to first image if no cover is found
+                $coverImage = $pages[0];
             } else {
                 $coverImage = '';
             }
@@ -193,8 +193,9 @@ function getGalleryItems() {
                     'title' => $portfolioTitle,
                     'category' => 'portfolio',
                     'subcat' => $subcat,
-                    'is_book' => true, // Hooking into the same interactive logic as Art Books
-                    'book_contents' => json_encode($pages)
+                    'is_book' => true, 
+                    'book_contents' => json_encode($pages),
+                    'raw_text' => 'Portfolio Collection'
                 ];
             }
         }
@@ -208,13 +209,8 @@ $galleryItems = getGalleryItems();
 // --- FALLBACK MOCK DATA ---
 if (empty($galleryItems)) {
     $galleryItems = [
-        ['url' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800', 'title' => 'Adam is waiting to eat the apple', 'category' => 'Printmaking', 'subcat' => '1970'],
-        ['url' => 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=800', 'title' => 'Bloody Dramatic Scene', 'category' => 'painting', 'subcat' => '1980'],
-        ['url' => 'https://images.unsplash.com/photo-1568526381923-caf3fd520382?q=80&w=800', 'title' => 'Acrobat Lover', 'category' => 'on-paper', 'subcat' => '1990'],
-        ['url' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800', 'title' => 'Faces in a book 1', 'category' => 'art-book', 'subcat' => '2004'],
-        ['url' => 'https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=800', 'title' => 'Homage to Guevara 1', 'category' => 'portfolio', 'subcat' => '2000'],
-        ['url' => 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800', 'title' => 'Body from Gypsum', 'category' => 'on-paper', 'subcat' => '1970'],
-        ['url' => 'https://images.unsplash.com/photo-1536924430914-91f9e2041b83?q=80&w=800', 'title' => 'Dancing on the bed', 'category' => 'painting', 'subcat' => '2020']
+        ['url' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800', 'title' => 'Adam is waiting to eat the apple', 'category' => 'Printmaking', 'subcat' => '1970', 'raw_text' => "Etching\n20.0 X 25.0 CM"],
+        ['url' => 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=800', 'title' => 'Bloody Dramatic Scene', 'category' => 'painting', 'subcat' => '1980', 'raw_text' => "Oil on Canvas\n100 X 120 CM"],
     ];
 }
 ?>
@@ -224,10 +220,11 @@ if (empty($galleryItems)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hayan Art | Artist Portfolio</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -249,7 +246,6 @@ if (empty($galleryItems)) {
         html { scroll-behavior: smooth; }
         .gallery-item { transition: all 0.4s ease-in-out; }
         
-        /* Fixes phantom scroll space by removing item completely from DOM flow */
         .gallery-item.hidden-item {
             display: none !important;
         }
@@ -264,9 +260,9 @@ if (empty($galleryItems)) {
         }
     </style>
 </head>
-<body class="bg-[#fcfbf9] text-gray-900 antialiased font-sans">
+<body class="bg-[#EAE4D9] text-gray-900 antialiased font-sans">
 
-    <nav class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <nav class="fixed w-full top-0 z-50 bg-[#EAE4D9]/80 backdrop-blur-md border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center">
@@ -280,7 +276,7 @@ if (empty($galleryItems)) {
                             Artworks
                             <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
+                        <div class="absolute left-0 mt-2 w-48 bg-[#EAE4D9] border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
                             <div class="py-1">
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'Printmaking\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Printmaking</a>
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'painting\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Painting</a>
@@ -294,7 +290,7 @@ if (empty($galleryItems)) {
                             Collections
                             <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
+                        <div class="absolute left-0 mt-2 w-48 bg-[#EAE4D9] border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0">
                             <div class="py-1">
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'art-book\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Art Book</a>
                                 <a href="#portfolio" onclick="document.querySelector('[data-filter=\'portfolio\']').click()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-dark">Portfolio</a>
@@ -310,7 +306,7 @@ if (empty($galleryItems)) {
 
     <section id="home" class="pt-20 w-full min-h-[90vh] flex flex-col md:flex-row bg-brand">
         <div class="w-full md:w-1/2 relative min-h-[50vh] md:min-h-full">
-            <img src="1970\Painting\doleful man.jpg" class="absolute inset-0 w-full h-full object-cover object-top" alt="Hayan Art Painting">
+            <img src="1970/Painting/doleful man.jpg" onerror="this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200&auto=format&fit=crop'" class="absolute inset-0 w-full h-full object-cover object-top" alt="Hayan Art Painting">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             
             <div class="absolute bottom-8 left-8 md:bottom-16 md:left-12 text-white">
@@ -345,7 +341,7 @@ if (empty($galleryItems)) {
             <div class="hidden flex-wrap justify-center gap-2 md:gap-3 mb-8 transition-all duration-300" id="sub-filter-buttons"></div>
             
             <div id="book-view-header" class="hidden flex-col items-center mb-8 transition-all duration-300">
-                <button id="back-to-books-btn" class="mb-4 px-5 py-2 rounded-full border border-gray-300 bg-white text-gray-700 hover:border-dark hover:text-dark hover:shadow-md flex items-center gap-2 font-medium transition-all focus:outline-none">
+                <button id="back-to-books-btn" class="mb-4 px-5 py-2 rounded-full border border-gray-300 bg-[#EAE4D9] text-gray-700 hover:border-dark hover:text-dark hover:shadow-md flex items-center gap-2 font-medium transition-all focus:outline-none">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to <span id="back-to-year" class="font-bold"></span> <span id="back-to-type">Books</span>
                 </button>
@@ -358,6 +354,8 @@ if (empty($galleryItems)) {
                 <div class="gallery-item group relative break-inside-avoid mb-4 md:mb-6 inline-block w-full overflow-hidden rounded-md bg-gray-200 show-item shadow-sm hover:shadow-xl cursor-pointer <?php echo isset($item['is_book']) ? 'book-trigger' : 'lightbox-trigger'; ?>" 
                      data-category="<?php echo htmlspecialchars($item['category']); ?>" 
                      data-subcat="<?php echo htmlspecialchars($item['subcat']); ?>"
+                     data-title="<?php echo htmlspecialchars($item['title']); ?>"
+                     data-info="<?php echo htmlspecialchars($item['raw_text'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                      <?php if(isset($item['is_book'])) echo "data-book-contents='" . htmlspecialchars($item['book_contents'], ENT_QUOTES, 'UTF-8') . "'"; ?>
                      <?php if(isset($item['is_book'])) echo "data-book-title='" . htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') . "'"; ?>
                      >
@@ -385,49 +383,78 @@ if (empty($galleryItems)) {
         </div>
     </section>
 
-    <!-- Lightbox Overlay -->
-    <div id="lightbox" class="fixed inset-0 z-[100] bg-black/95 hidden flex justify-center items-center opacity-0 transition-opacity duration-300 cursor-zoom-out">
-        <button id="lightbox-close" class="absolute top-6 right-6 text-white/70 hover:text-white focus:outline-none z-[101]">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- ELEGANT LIGHTBOX -->
+    <div id="lightbox" class="fixed inset-0 z-[100] bg-[#EAE4D9] hidden opacity-0 transition-opacity duration-300 overflow-y-auto">
+        
+        <button id="lightbox-close" class="fixed top-6 right-8 md:top-10 md:right-12 text-gray-500 hover:text-black focus:outline-none z-[101] transition-colors bg-[#EAE4D9]/80 rounded-full p-2">
+            <svg class="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-        <img id="lightbox-img" src="" alt="Enlarged Art" class="max-w-[90vw] max-h-[90vh] object-contain transform scale-95 transition-transform duration-300 shadow-2xl">
+
+        <div class="min-h-screen flex flex-col md:flex-row w-full max-w-[90rem] mx-auto px-6 md:px-16 items-center justify-center gap-10 md:gap-24 relative z-10 py-24 md:py-12">
+            
+            <div class="w-full md:w-1/2 flex justify-center md:justify-end items-center">
+                <img id="lightbox-img" src="" alt="Enlarged Art" class="max-w-full max-h-[60vh] md:max-h-[85vh] object-contain shadow-2xl bg-[#EAE4D9]">
+            </div>
+            
+            <div class="w-full md:w-1/2 flex flex-col justify-center text-left">
+                <!-- Title without the year -->
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-serif text-dark mb-4 md:mb-6">
+                    <span id="lightbox-title">Artwork Title</span>
+                </h2>
+                
+                <!-- Raw text from text file with pre-wrap for line breaks -->
+                <div id="lightbox-info" class="font-sans text-[14px] md:text-[15px] text-gray-600 tracking-wider uppercase mb-10 md:mb-16 whitespace-pre-wrap leading-relaxed"></div>
+
+                <div class="flex items-center justify-start gap-8 md:gap-16 text-[14px] md:text-[15px] font-sans font-semibold text-gray-800">
+                    <button id="lightbox-prev" class="hover:text-black transition-colors flex items-center gap-2 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed uppercase tracking-wider py-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                        Previous
+                    </button>
+                    <button id="lightbox-next" class="hover:text-black transition-colors flex items-center gap-2 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed uppercase tracking-wider py-2">
+                        Next 
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <footer id="contact" class="bg-[#ebe9e4] pt-16 pb-8 text-[#1a1a1a] relative border-t border-gray-300">
+    <footer id="contact" class="bg-[#EAE4D9] pt-16 pb-8 text-[#1a1a1a] relative border-t border-gray-300">
         <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-start mb-16">
-                <div class="mb-10 md:mb-0">
+                <div class="w-full md:w-1/3 mb-10 md:mb-0">
                     <div class="mb-2">
                         <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="12" fill="black"/>
                             <path d="M26 0V24C32.6274 24 38 18.6274 38 12C38 5.37258 32.6274 0 26 0Z" fill="black"/>
                         </svg>
                     </div>
-                    <h2 class="text-xl md:text-2xl font-sans font-medium tracking-wide">Hayan Art</h2>
+                    <h2 class="text-2xl font-sans font-medium tracking-wide">Hayan Art</h2>
                 </div>
 
-                <div class="flex flex-wrap gap-12 md:gap-24 font-sans text-[15px] leading-relaxed">
-                    <div class="flex flex-col gap-1.5">
+                <div class="w-full md:w-2/3 flex flex-col sm:flex-row justify-between md:justify-end md:gap-24 font-sans text-[15px] leading-relaxed">
+                    <div class="flex flex-col gap-1.5 mb-6 sm:mb-0">
                         <a href="index.php#home" class="hover:text-black hover:underline transition-all">Home</a>
-                        <a href="cv.html" class="hover:text-black hover:underline transition-all">CV</a>
+                        <a href="cv.html" class="hover:text-black hover:underline transition-all">About</a>
                         <a href="mailto:hello@hayan.art" class="hover:text-black hover:underline transition-all">Contact</a>
                     </div>
-                    <div class="flex flex-col gap-1.5">
-                        <a href="https://www.facebook.com/hayan.abduljabbar" target="_blank" class="hover:text-black hover:underline transition-all">Facebook</a>
+                    <div class="flex flex-col gap-1.5 mb-6 sm:mb-0">
+                        <a href="https://www.facebook.com/hayan.abduljabbar" class="hover:text-black hover:underline transition-all" target="_blank">Facebook</a>
                         <a href="#" class="hover:text-black hover:underline transition-all">Twitter</a>
                         <a href="#" class="hover:text-black hover:underline transition-all">LinkedIn</a>
                     </div>
                     <div class="flex flex-col gap-1.5">
-                        <p>Phone Number: +964 770 392 6787</p>
+                        <p>Tel. +964 770 392 6787</p>
                         <p>Baghdad, Iraq</p>
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row justify-between items-center text-sm mt-12 pt-8 border-t border-gray-300/50">
-                <p class="mb-4 md:mb-0">Proudly designed by <a href="#" class="underline hover:text-black font-medium">Shams Hayan</a></p>
+            <div class="relative flex flex-col md:flex-row items-center justify-center text-[13px] md:text-sm mt-12 pt-8">
+                <p class="md:absolute md:left-0 mb-4 md:mb-0">Proudly designed by <a href="#" class="underline hover:text-black font-medium">Shams Hayan</a></p>
                 <p>&copy; 2026 Hayan. All Rights Reserved.</p>
             </div>
         </div>
@@ -445,7 +472,6 @@ if (empty($galleryItems)) {
             const backToYearSpan = document.getElementById('back-to-year');
             const backToTypeSpan = document.getElementById('back-to-type');
             
-            // Initialization variables (Moved to top to prevent ReferenceError)
             let activeMainFilter = 'Printmaking';
             let activeSubFilter = '1970';
             let isBookViewActive = false;
@@ -462,7 +488,6 @@ if (empty($galleryItems)) {
                 const grid = document.getElementById('gallery-grid');
                 grid.style.display = 'none';
 
-                // Dynamically switch layout: Books/Portfolios use Horizontal Grid, Artworks use Vertical Masonry
                 if (!isBookViewActive) {
                     if (activeMainFilter === 'art-book' || activeMainFilter === 'portfolio') {
                         grid.classList.remove('columns-1', 'sm:columns-2', 'lg:columns-3', 'xl:columns-4');
@@ -506,7 +531,6 @@ if (empty($galleryItems)) {
                     subFilterContainer.classList.remove('hidden');
                     subFilterContainer.classList.add('flex');
 
-                    // Loops through map to create standard year buttons
                     subCategoriesMap[mainCategory].forEach(sub => {
                         const btn = document.createElement('button');
                         btn.setAttribute('data-subfilter', sub);
@@ -542,7 +566,6 @@ if (empty($galleryItems)) {
 
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Reset book view if active
                     if (isBookViewActive) {
                         isBookViewActive = false;
                         document.querySelectorAll('.temp-book-page').forEach(el => el.remove());
@@ -560,7 +583,6 @@ if (empty($galleryItems)) {
 
                     activeMainFilter = button.getAttribute('data-filter');
                     
-                    // Default to the first available category instead of "all"
                     if (subCategoriesMap[activeMainFilter]) {
                         activeSubFilter = subCategoriesMap[activeMainFilter][0];
                     }
@@ -570,7 +592,6 @@ if (empty($galleryItems)) {
                 });
             });
 
-            // Initialize Default State on page load
             filterButtons.forEach(btn => {
                 if (btn.getAttribute('data-filter') === activeMainFilter) {
                     btn.classList.remove('bg-transparent', 'text-gray-600', 'border-gray-300');
@@ -581,7 +602,7 @@ if (empty($galleryItems)) {
                 }
             });
             renderSubFilters(activeMainFilter);
-            updateGallery(); // Force gallery to filter items immediately on load
+            updateGallery();
 
             const bookTriggers = document.querySelectorAll('.book-trigger');
 
@@ -595,7 +616,7 @@ if (empty($galleryItems)) {
                 galleryItems.forEach(item => {
                     item.classList.remove('show-item');
                     item.classList.add('hidden-item');
-                    item.style.display = 'none'; // strictly hide everything
+                    item.style.display = 'none'; 
                 });
 
                 bookViewHeader.classList.remove('hidden');
@@ -613,6 +634,9 @@ if (empty($galleryItems)) {
                     pageDiv.className = 'temp-book-page lightbox-trigger cursor-pointer gallery-item group relative break-inside-avoid mb-4 md:mb-6 w-full overflow-hidden rounded-md bg-gray-200 show-item shadow-sm hover:shadow-xl';
                     
                     const labelText = index === 0 ? 'Cover' : 'Page ' + index;
+
+                    pageDiv.setAttribute('data-title', title + ' - ' + labelText);
+                    pageDiv.setAttribute('data-info', category === 'portfolio' ? 'Portfolio Page' : 'Art Book Page');
 
                     pageDiv.innerHTML = `
                         <img src="${imgUrl}" alt="${labelText}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-105" loading="lazy">
@@ -663,41 +687,100 @@ if (empty($galleryItems)) {
                 });
             });
 
+            // --- Elegant Lightbox & Navigation Logic ---
             const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightbox-img');
             const galleryGrid = document.getElementById('gallery-grid');
+            
+            let currentLightboxItems = [];
+            let currentLightboxIndex = -1;
+
+            function updateLightboxUI(index) {
+                const item = currentLightboxItems[index];
+                const img = item.querySelector('img');
+                
+                lightboxImg.src = img.src;
+                
+                const rawTitle = item.getAttribute('data-title') || 'Artwork';
+                const titleParts = rawTitle.split(' - ');
+                document.getElementById('lightbox-title').textContent = titleParts[0]; 
+                
+                document.getElementById('lightbox-info').textContent = item.getAttribute('data-info') || '';
+
+                document.getElementById('lightbox-prev').disabled = (index === 0);
+                document.getElementById('lightbox-next').disabled = (index === currentLightboxItems.length - 1);
+            }
 
             galleryGrid.addEventListener('click', (e) => {
                 const item = e.target.closest('.lightbox-trigger');
                 if (!item) return;
 
-                const img = item.querySelector('img');
-                if (img) {
-                    lightboxImg.src = img.src;
+                e.preventDefault(); 
+
+                if (isBookViewActive) {
+                    currentLightboxItems = Array.from(document.querySelectorAll('.temp-book-page.lightbox-trigger'));
+                } else {
+                    currentLightboxItems = Array.from(document.querySelectorAll('.gallery-item.show-item.lightbox-trigger'));
+                }
+                
+                currentLightboxIndex = currentLightboxItems.indexOf(item);
+                
+                if (currentLightboxIndex > -1) {
+                    updateLightboxUI(currentLightboxIndex);
+                    
                     lightbox.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; 
+                    
                     setTimeout(() => {
                         lightbox.classList.remove('opacity-0');
-                        lightboxImg.classList.remove('scale-95');
-                        lightboxImg.classList.add('scale-100');
-                    }, 10);
+                    }, 20);
+                }
+            });
+
+            document.getElementById('lightbox-prev').addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentLightboxIndex > 0) {
+                    currentLightboxIndex--;
+                    updateLightboxUI(currentLightboxIndex);
+                }
+            });
+
+            document.getElementById('lightbox-next').addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentLightboxIndex < currentLightboxItems.length - 1) {
+                    currentLightboxIndex++;
+                    updateLightboxUI(currentLightboxIndex);
                 }
             });
 
             function closeLightbox() {
                 lightbox.classList.add('opacity-0');
-                lightboxImg.classList.remove('scale-100');
-                lightboxImg.classList.add('scale-95');
+                document.body.style.overflow = ''; 
                 setTimeout(() => {
                     lightbox.classList.add('hidden');
                     lightboxImg.src = '';
                 }, 300);
             }
 
-            lightbox.addEventListener('click', closeLightbox);
+            document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+            
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox || e.target.classList.contains('min-h-screen')) {
+                    closeLightbox();
+                }
+            });
             
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
-                    closeLightbox();
+                if (!lightbox.classList.contains('hidden')) {
+                    if (e.key === 'Escape') closeLightbox();
+                    if (e.key === 'ArrowLeft' && currentLightboxIndex > 0) {
+                        currentLightboxIndex--;
+                        updateLightboxUI(currentLightboxIndex);
+                    }
+                    if (e.key === 'ArrowRight' && currentLightboxIndex < currentLightboxItems.length - 1) {
+                        currentLightboxIndex++;
+                        updateLightboxUI(currentLightboxIndex);
+                    }
                 }
             });
         });
